@@ -12,6 +12,7 @@ import { DataManagerPage } from "../DataManager/DataManager";
 import { SettingsPage } from "../Settings";
 import { EmptyProjectsList, ProjectsList } from "./ProjectsList";
 import { useAbortController, useUpdatePageTitle } from "@humansignal/core";
+import { useConfig } from "../../providers/ConfigProvider";
 import "./Projects.scss";
 
 const getCurrentPage = () => {
@@ -161,7 +162,10 @@ ProjectsPage.routes = ({ store }) => [
   },
 ];
 ProjectsPage.context = ({ openModal, showButton }) => {
-  if (!showButton) return null;
+  const config = useConfig();
+  const isAdmin = Boolean(config?.user?.is_staff || config?.user?.is_superuser);
+
+  if (!showButton || !isAdmin) return null;
   return (
     <Button onClick={openModal} size="small" aria-label="Create new project">
       Create

@@ -42,10 +42,12 @@
     }
 
     {% if not user.is_staff and not user.is_superuser %}
-    /* 3. Settings is restricted to Administrators only (hidden for annotators/regular users) */
+    /* 3. Settings & Project creation are restricted to Administrators only (hidden for annotators/regular users) */
     a[href*="/settings"],
     .menu-item-settings,
-    [data-testid*="settings"] {
+    [data-testid*="settings"],
+    button[aria-label="Create new project"],
+    .empty-projects-page button {
       display: none !important;
       pointer-events: none !important;
     }

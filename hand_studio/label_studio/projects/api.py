@@ -201,6 +201,9 @@ class ProjectListAPI(generics.ListCreateAPIView):
         return context
 
     def perform_create(self, ser):
+        if not (self.request.user.is_staff or self.request.user.is_superuser):
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only administrators can create projects.")
         try:
             ser.save(organization=self.request.user.active_organization)
         except IntegrityError as e:

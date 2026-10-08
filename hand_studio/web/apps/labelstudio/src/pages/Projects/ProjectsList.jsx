@@ -37,6 +37,9 @@ export const ProjectsList = ({ projects, currentPage, totalItems, loadNextPage, 
 };
 
 export const EmptyProjectsList = ({ openModal }) => {
+  const config = useConfig();
+  const isAdmin = Boolean(config?.user?.is_staff || config?.user?.is_superuser);
+
   return (
     <div className={cn("empty-projects-page").toClassName()}>
       <img
@@ -45,10 +48,12 @@ export const EmptyProjectsList = ({ openModal }) => {
         src={absoluteURL("/static/images/opossum_looking.png")}
       />
       <h1 className={cn("empty-projects-page").elem("header").toClassName()}>Heidi doesn't see any projects here!</h1>
-      <p>Create one and start labeling your data.</p>
-      <Button onClick={openModal} className="my-8" aria-label="Create new project">
-        Create Project
-      </Button>
+      <p>{isAdmin ? "Create one and start labeling your data." : "No projects are currently available for annotation."}</p>
+      {isAdmin && (
+        <Button onClick={openModal} className="my-8" aria-label="Create new project">
+          Create Project
+        </Button>
+      )}
     </div>
   );
 };
