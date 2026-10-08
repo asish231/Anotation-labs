@@ -8,6 +8,7 @@ import { Menu, Pagination } from "../../components";
 import { cn } from "../../utils/bem";
 import { absoluteURL } from "../../utils/helpers";
 import { ProjectStateChip } from "@humansignal/app-common";
+import { useConfig } from "../../providers/ConfigProvider";
 
 const DEFAULT_CARD_COLORS = ["#FFFFFF", "#FDFDFC"];
 
@@ -53,6 +54,8 @@ export const EmptyProjectsList = ({ openModal }) => {
 };
 
 const ProjectCard = ({ project }) => {
+  const config = useConfig();
+  const isAdmin = Boolean(config?.user?.is_staff || config?.user?.is_superuser);
   const color = useMemo(() => {
     return DEFAULT_CARD_COLORS.includes(project.color) ? null : project.color;
   }, [project]);
@@ -83,7 +86,7 @@ const ProjectCard = ({ project }) => {
           <div className={cn("project-card").elem("title").toClassName()}>
             <div className={cn("project-card").elem("title-text-wrapper").toClassName()}>
               <Tooltip title={project.title ?? "New project"}>
-                <div className={cn("project-card").elem("title-text").toClassName()}>
+                <div className={cn("project-card").elem("title-text")}>
                   {project.title ?? "New project"}
                 </div>
               </Tooltip>
@@ -99,7 +102,9 @@ const ProjectCard = ({ project }) => {
               <Dropdown.Trigger
                 content={
                   <Menu contextual>
-                    <Menu.Item href={`/projects/${project.id}/settings`}>Settings</Menu.Item>
+                    {isAdmin && (
+                      <Menu.Item href={`/projects/${project.id}/settings`}>Settings</Menu.Item>
+                    )}
                     <Menu.Item href={`/projects/${project.id}/data?labeling=1`}>Label</Menu.Item>
                   </Menu>
                 }

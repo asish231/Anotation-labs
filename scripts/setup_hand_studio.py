@@ -33,7 +33,7 @@ from django.conf import settings
 from users.models import User
 from organizations.models import Organization, OrganizationMember
 from projects.models import Project
-from tasks.models import Task, Prediction
+from tasks.models import Task, Prediction, Annotation
 
 ADMIN_EMAIL = "admin@handstudio.local"
 ADMIN_PASSWORD = "HandStudio#2026"
@@ -292,6 +292,21 @@ def run_models(project):
                     task=task, project=project, result=res, score=score,
                     model_version=model_name,
                 )
+
+        # Directly annotate with MediaPipe so the keypoints are loaded onto the image canvas
+        annotator_user = User.objects.filter(email=ANNOTATOR_EMAIL).first()
+        if mp_res and annotator_user:
+            Annotation.objects.filter(task=task).delete()
+            Annotation.objects.create(
+                task=task,
+                project=project,
+                result=mp_res,
+                completed_by=annotator_user,
+                ground_truth=False,
+            )
+            task.is_labeled = True
+            task.save(update_fields=["is_labeled"])
+
         done += 1
         print(f"  task {task.id}: mediapipe={len(mp_res)}pts@{mp_score} dwpose={len(dw_res)}pts@{dw_score}")
 

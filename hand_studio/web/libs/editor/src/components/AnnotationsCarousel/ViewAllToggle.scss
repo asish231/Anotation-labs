@@ -8,7 +8,8 @@
   width: auto;
 
   // Original styles
-  display: flex;
+  display: none !important;
+  pointer-events: none !important;
   padding: var(--spacing-tighter) var(--spacing-base) var(--spacing-tighter) var(--spacing-tight);
   border-radius: var(--corner-radius-small) var(--corner-radius-small) 0 0;
   border-width: 1px 1px 0;

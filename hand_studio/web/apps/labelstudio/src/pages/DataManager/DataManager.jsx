@@ -6,6 +6,7 @@ import { Spinner } from "../../components";
 import { modal } from "../../components/Modal/Modal";
 import { Space } from "../../components/Space/Space";
 import { useAPI } from "../../providers/ApiProvider";
+import { useConfig } from "../../providers/ConfigProvider";
 import { useProject } from "../../providers/ProjectProvider";
 import { useContextProps, useParams } from "../../providers/RoutesProvider";
 import { addCrumb, deleteCrumb } from "../../services/breadrumbs";
@@ -241,10 +242,14 @@ DataManagerPage.pages = {
 DataManagerPage.context = ({ dmRef }) => {
   const { project } = useProject();
   const [mode, setMode] = useState(dmRef?.mode ?? "explorer");
+  const config = useConfig();
+  const isAdmin = Boolean(config?.user?.is_staff || config?.user?.is_superuser);
 
-  const links = {
-    "/settings": "Settings",
-  };
+  const links = isAdmin
+    ? {
+        "/settings": "Settings",
+      }
+    : {};
 
   const updateCrumbs = (currentMode) => {
     const isExplorer = currentMode === "explorer";

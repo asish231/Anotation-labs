@@ -40,7 +40,7 @@
   }
 
   &_newLabelingUI {
-    display: block;
+    display: none !important;
     background-color: var(--color-neutral-surface);
     height: 42px;
     border-bottom: 1px solid var(--color-neutral-border);

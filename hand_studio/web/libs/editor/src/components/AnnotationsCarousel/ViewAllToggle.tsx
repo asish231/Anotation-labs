@@ -14,10 +14,12 @@ export const ViewAllToggle = observer(({ isActive, onClick }: ViewAllToggleProps
     <button
       type="button"
       className={cn("view-all-toggle").mod({ selected: isActive }).toClassName()}
-      onClick={onClick}
+      onClick={undefined}
       aria-label="Compare all annotations"
       aria-pressed={isActive}
       data-testid="compare-all-toggle"
+      disabled={true}
+      style={{ display: "none", pointerEvents: "none" }}
     >
       <div className={cn("view-all-toggle").elem("mainSection").toClassName()}>
         <div className={cn("view-all-toggle").elem("iconContainer").toClassName()}>

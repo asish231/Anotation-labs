@@ -28,6 +28,30 @@
     <link href="{{settings.FRONTEND_HOSTNAME}}/react-app/main.css?v={{ versions.backend.commit }}" rel="stylesheet">
   {% endblock %}
 
+  <style>
+    /* Hand Studio Customizations:
+       1. Keep component logic intact but do not show the top prediction/annotation tabs & carousel in the UI.
+       2. Disable & hide the Compare All toggle.
+    */
+    .topbar_newLabelingUI,
+    .view-all-toggle,
+    [data-testid="compare-all-toggle"],
+    .annotations-carousel {
+      display: none !important;
+      pointer-events: none !important;
+    }
+
+    {% if not user.is_staff and not user.is_superuser %}
+    /* 3. Settings is restricted to Administrators only (hidden for annotators/regular users) */
+    a[href*="/settings"],
+    .menu-item-settings,
+    [data-testid*="settings"] {
+      display: none !important;
+      pointer-events: none !important;
+    }
+    {% endif %}
+  </style>
+
   {% block theme_colors %}
     {% if feature_flags.fflag_feat_front_optic_1217_theme_toggle_short %}
     <script>
@@ -168,6 +192,8 @@
 	customHotkeys: __customHotkeys,
 
       allow_newsletters: {% if user.allow_newsletters is None %}null{% else %}{{user.allow_newsletters|yesno:"true,false"}}{% endif %},
+      is_staff: {{ user.is_staff|yesno:"true,false" }},
+      is_superuser: {{ user.is_superuser|yesno:"true,false" }},
       {% if user.avatar %}
       avatar: "{{user.avatar_url|safe}}",
       {% endif %}

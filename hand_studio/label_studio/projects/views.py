@@ -5,6 +5,8 @@ import logging
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from django.core.exceptions import PermissionDenied
+
 logger = logging.getLogger(__name__)
 
 
@@ -15,4 +17,6 @@ def project_list(request):
 
 @login_required
 def project_settings(request, pk, sub_path):
+    if not (request.user.is_staff or request.user.is_superuser):
+        raise PermissionDenied("Settings are restricted to administrators only.")
     return render(request, 'projects/settings.html')
