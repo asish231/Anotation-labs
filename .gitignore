@@ -1,0 +1,26 @@
+bazel-*
+mediapipe/MediaPipe.xcodeproj
+mediapipe/MediaPipe.tulsiproj/*.tulsiconf-user
+mediapipe/provisioning_profile.mobileprovision
+node_modules/
+.configure.bazelrc
+.user.bazelrc
+
+# Datasets & generated data
+biokin_data/
+hand_studio_data/
+annotated_output/
+
+# Checkpoints (large model weights)
+checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+mp_env/
+
+# Tool sessions, caches & logs
+.freebuff/
+.playwright-cli/
+*.log
